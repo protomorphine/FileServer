@@ -24,10 +24,7 @@ namespace FileServer.Infrastructure.Repositories
 
         public async Task<FileEntity> GetAsync(Guid id)
         {
-            var entity = await _dbContext.Files.FirstOrDefaultAsync(it => it.Id == id);
-            //if (entity == null)
-            //    throw new ObjectNotFoundException($"Файл с id {id} не найден в базе данных.");
-            return entity;
+            return await _dbContext.Files.FirstOrDefaultAsync(it => it.Id == id); ;
         }
 
         public async Task DeleteAsync(FileEntity fileEntity)

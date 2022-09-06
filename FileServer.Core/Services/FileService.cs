@@ -43,11 +43,6 @@ namespace FileServer.Core.Services
             return fileEntity.Id;
         }
 
-        public struct Test
-        {
-            public Guid Id { get; set; }
-        }
-
         /// <summary>
         /// Получает файл из папки, указанной в appsettings.json
         /// </summary>
