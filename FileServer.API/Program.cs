@@ -1,4 +1,5 @@
 using FileServer.Core.Models;
+using FileServer.API.Models;
 using FileServer.Core.Services;
 using FileServer.API.Models.Exceptions;
 using System.Data.Entity.Core;
@@ -12,13 +13,15 @@ using FileServer.Infrastructure.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("appsettings.json").Build();
-var config = builder.Configuration.Get<Config>();
+var dbOptions = builder.Configuration.GetSection("DbOptions").Get<DbOptions>();
+var storageOptions = builder.Configuration.GetSection("StorageOptions").Get<StorageOptions>();
 
 // Add services to the container.
 
 builder.Services.AddControllers();
 
-builder.Services.AddSingleton<Config>(config);
+builder.Services.AddSingleton<DbOptions>(dbOptions);
+builder.Services.AddSingleton<StorageOptions>(storageOptions);
 
 builder.Services.AddTransient<IFileService, FileService>();
 builder.Services.AddTransient<IFileRepository, FileRepository>();
@@ -29,7 +32,7 @@ builder.Services.AddProblemDetails(options => {
 });
 
 builder.Services.AddDbContext<AppDbContext>(options => {
-    options.UseSqlite(config.ConnectionString);
+    options.UseSqlite(dbOptions.ConnectionString);
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

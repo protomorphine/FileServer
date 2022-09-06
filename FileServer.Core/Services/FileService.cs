@@ -1,29 +1,30 @@
 ﻿using FileServer.Core.Services.Interfaces;
 using FileServer.Core.Repositories;
-using FileServer.Core.Models;
 using FileServer.Core.Extensions;
-using System.Data.Entity.Core;
+using FileServer.Core.Models;
 
 namespace FileServer.Core.Services
 {
     public class FileService : IFileService
     {
-        private readonly Config _config;
+        private readonly StorageOptions _storageOptions;
         private readonly IFileRepository _fileRepository;
 
-        public FileService(Config config, IFileRepository fileRepository)
+        public FileService(StorageOptions storageOptions, IFileRepository fileRepository)
         {
-            _config = config;
+            _storageOptions = storageOptions;
             _fileRepository = fileRepository;
         }
 
         /// <summary>
-        /// Загружает файл и складывает в папку, указанную в appsettings.json
+        /// Загрузка файла
         /// </summary>
-        /// <param name="file">Полученный IFormFile file</param>
+        /// <param name="file"> Stream файла </param>
+        /// <param name="fileName"> Имя Файла </param>
+        /// <returns> id файла в БД </returns>
         public async Task<Guid> Upload(Stream file, string fileName)
         {
-            var filePath = Path.Combine(_config.FileDir, fileName);
+            var filePath = Path.Combine(_storageOptions.FileDir, fileName);
 
             using (file)
             {
@@ -53,7 +54,7 @@ namespace FileServer.Core.Services
 
             file.ThrowIfNotFound("Файл не найден");
 
-            var filePath = Path.Combine(_config.FileDir, file.Name);
+            var filePath = Path.Combine(_storageOptions.FileDir, file.Name);
 
             if (!File.Exists(filePath))
                 throw new FileNotFoundException("Запрашиваемый файл не найден!");
@@ -77,7 +78,7 @@ namespace FileServer.Core.Services
             file.ThrowIfNotFound("Файл не найден.");
             await _fileRepository.DeleteAsync(file);
 
-            var filePath = Path.Combine(_config.FileDir, file.Name);
+            var filePath = Path.Combine(_storageOptions.FileDir, file.Name);
 
             if (!File.Exists(filePath))
                 throw new FileNotFoundException("Файл не найден!");
