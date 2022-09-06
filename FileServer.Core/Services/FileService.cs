@@ -1,6 +1,8 @@
 ﻿using FileServer.Core.Services.Interfaces;
 using FileServer.Core.Repositories;
 using FileServer.Core.Models;
+using FileServer.Core.Extensions;
+using System.Data.Entity.Core;
 
 namespace FileServer.Core.Services
 {
@@ -41,6 +43,11 @@ namespace FileServer.Core.Services
             return fileEntity.Id;
         }
 
+        public struct Test
+        {
+            public Guid Id { get; set; }
+        }
+
         /// <summary>
         /// Получает файл из папки, указанной в appsettings.json
         /// </summary>
@@ -48,6 +55,8 @@ namespace FileServer.Core.Services
         public async Task<FileResponceModel> Download(Guid id)
         {
             var file = await _fileRepository.GetAsync(id);
+
+            file.ThrowIfNotFound("Файл не найден");
 
             var filePath = Path.Combine(_config.FileDir, file.Name);
 
@@ -69,10 +78,11 @@ namespace FileServer.Core.Services
         /// <param name="id">Имя файла</param>
         public async Task Delete(Guid id)
         {
-            var entity = await _fileRepository.GetAsync(id);
-            await _fileRepository.DeleteAsync(entity);
+            var file = await _fileRepository.GetAsync(id);
+            file.ThrowIfNotFound("Файл не найден.");
+            await _fileRepository.DeleteAsync(file);
 
-            var filePath = Path.Combine(_config.FileDir, entity.Name);
+            var filePath = Path.Combine(_config.FileDir, file.Name);
 
             if (!File.Exists(filePath))
                 throw new FileNotFoundException("Файл не найден!");
