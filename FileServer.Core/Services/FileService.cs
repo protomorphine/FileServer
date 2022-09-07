@@ -24,24 +24,25 @@ namespace FileServer.Core.Services
         /// <returns> id файла в БД </returns>
         public async Task<Guid> Upload(Stream file, string fileName)
         {
-            var filePath = Path.Combine(_storageOptions.FileDir, fileName);
-
-            using (file)
+            using var dbTransaction = await _fileRepository.Context.Database.BeginTransactionAsync();
+            try
             {
-                using (var dest = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(dest);
-                }
+                Task<FileEntity> fileTask = AddToDbAsync(fileName);
+                Task copyFileTask = CopyFileAsync(file, fileName);
+                FileEntity? fileEntity = null;
+                var getFileEntityTask = Task.Run(async () => fileEntity = await fileTask);
+
+                await Task.WhenAll(copyFileTask, getFileEntityTask);
+                
+                await dbTransaction.CommitAsync();
+
+                return fileEntity!.Id;
             }
-
-            FileEntity fileEntity = new()
+            catch (Exception ex)
             {
-                Name = fileName
-            };
-
-            await _fileRepository.CreateAsync(fileEntity);
-            
-            return fileEntity.Id;
+                await dbTransaction.RollbackAsync();
+                throw;
+            }
         }
 
         /// <summary>
@@ -84,6 +85,30 @@ namespace FileServer.Core.Services
                 throw new FileNotFoundException("Файл не найден!");
 
             await Task.Run(() => File.Delete(filePath));
+        }
+
+        private async Task CopyFileAsync(Stream fileStream, string fileName)
+        {
+            var filePath = Path.Combine(_storageOptions.FileDir, fileName);
+
+            using (fileStream)
+            {
+                using (var dest = new FileStream(filePath, FileMode.Create))
+                {
+                    await fileStream.CopyToAsync(dest);
+                }
+            }
+        }
+
+        private async Task<FileEntity> AddToDbAsync(string fileName)
+        {
+            FileEntity entity = new()
+            {
+                Name = fileName
+            };
+
+            await _fileRepository.CreateAsync(entity);
+            return entity;
         }
     }
 }
