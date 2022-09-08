@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FileServer.Core.Models
+﻿namespace FileServer.Core.Models
 {
+    /// <summary>
+    /// Конфигурация файлового хранилища
+    /// </summary>
     public class StorageOptions
     {
-        public string FileDir { get; set; }
+        /// <summary>
+        /// Папка на диске, куда складываются файлы
+        /// </summary>
+        public string? FileDir { get; set; }
     }
 }

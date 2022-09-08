@@ -28,9 +28,7 @@ namespace FileServer.API.Controllers
         /// </summary>
         /// <param name="file">Файл</param>
         /// <returns>id файла</returns>
-        /// <response code="200">Возвращает id загруженного файла</response>
         [HttpPost("upload")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> UploadFile(IFormFile file)
         {
             var result = await _fileService.Upload(file.OpenReadStream(), file.FileName);

@@ -1,7 +1,13 @@
 ﻿namespace FileServer.API.Models
 {
+    /// <summary>
+    /// Настройки подключения к бд
+    /// </summary>
     public class DbOptions
     {
-        public string ConnectionString { get; set; }
+        /// <summary>
+        /// Строка подключения
+        /// </summary>
+        public string? ConnectionString { get; set; }
     }
 }

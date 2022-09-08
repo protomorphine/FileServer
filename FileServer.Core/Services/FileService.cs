@@ -5,10 +5,26 @@ using FileServer.Core.Models;
 
 namespace FileServer.Core.Services
 {
+    /// <summary>
+    /// Сервис для работы с файлами
+    /// </summary>
     public class FileService : IFileService
     {
+        #region поля
+
+        /// <summary>
+        /// Настройки хранилища
+        /// </summary>
         private readonly StorageOptions _storageOptions;
+        
+        /// <summary>
+        /// Репозиторий для работы с файлами
+        /// </summary>
         private readonly IFileRepository _fileRepository;
+
+        #endregion
+
+        #region конструкторы
 
         public FileService(StorageOptions storageOptions, IFileRepository fileRepository)
         {
@@ -16,12 +32,16 @@ namespace FileServer.Core.Services
             _fileRepository = fileRepository;
         }
 
+        #endregion
+
+        #region методы
+
         /// <summary>
-        /// Загрузка файла
+        /// Метод загрузки файла на сервер
         /// </summary>
-        /// <param name="file"> Stream файла </param>
-        /// <param name="fileName"> Имя Файла </param>
-        /// <returns> id файла в БД </returns>
+        /// <param name="file">Поток, получаемый из IFormFile</param>
+        /// <param name="fileName">Имя файла</param>
+        /// <returns>Id файла в формате Guid</returns>
         public async Task<Guid> Upload(Stream file, string fileName)
         {
             using var dbTransaction = await _fileRepository.Context.Database.BeginTransactionAsync();
@@ -87,6 +107,12 @@ namespace FileServer.Core.Services
             await Task.Run(() => File.Delete(filePath));
         }
 
+
+        /// <summary>
+        /// Сохраняет поток в файл
+        /// </summary>
+        /// <param name="fileStream">Поток</param>
+        /// <param name="fileName">Имя файла</param>
         private async Task CopyFileAsync(Stream fileStream, string fileName)
         {
             var filePath = Path.Combine(_storageOptions.FileDir, fileName);
@@ -100,6 +126,12 @@ namespace FileServer.Core.Services
             }
         }
 
+
+        /// <summary>
+        /// Создает новую запись в БД
+        /// </summary>
+        /// <param name="fileName">Имя файла</param>
+        /// <returns></returns>
         private async Task<FileEntity> AddToDbAsync(string fileName)
         {
             FileEntity entity = new()
@@ -110,6 +142,8 @@ namespace FileServer.Core.Services
             await _fileRepository.CreateAsync(entity);
             return entity;
         }
+
+        #endregion
     }
 }
 

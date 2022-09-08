@@ -2,10 +2,19 @@
 
 namespace FileServer.API.Models
 {
+    /// <summary>
+    /// Конфигурация приложения
+    /// </summary>
     public class Config
     {
-        public StorageOptions StorageOptions { get; set; }
+        /// <summary>
+        /// Настройки файлового хранилища
+        /// </summary>
+        public StorageOptions? StorageOptions { get; set; }
 
-        public DbOptions DbOptions { get; set; }
+        /// <summary>
+        /// Настройки подключения к бд
+        /// </summary>
+        public DbOptions? DbOptions { get; set; }
     }
 }

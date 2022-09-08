@@ -14,7 +14,5 @@ namespace FileServer.Core.Extensions
             if (obj == null)
                 throw new ObjectNotFoundException(message);
         }
-
-        //public static void ThrowIfFileNotFound<T>() { }
     }
 }

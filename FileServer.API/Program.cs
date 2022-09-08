@@ -13,15 +13,14 @@ using FileServer.Infrastructure.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("appsettings.json").Build();
-var dbOptions = builder.Configuration.GetSection("DbOptions").Get<DbOptions>();
-var storageOptions = builder.Configuration.GetSection("StorageOptions").Get<StorageOptions>();
+var config = builder.Configuration.GetSection("Config").Get<Config>();
 
 // Add services to the container.
 
 builder.Services.AddControllers();
 
-builder.Services.AddSingleton<DbOptions>(dbOptions);
-builder.Services.AddSingleton<StorageOptions>(storageOptions);
+builder.Services.AddSingleton<DbOptions>(config.DbOptions);
+builder.Services.AddSingleton<StorageOptions>(config.StorageOptions);
 
 builder.Services.AddTransient<IFileService, FileService>();
 builder.Services.AddTransient<IFileRepository, FileRepository>();
@@ -32,7 +31,7 @@ builder.Services.AddProblemDetails(options => {
 });
 
 builder.Services.AddDbContext<AppDbContext>(options => {
-    options.UseSqlite(dbOptions.ConnectionString);
+    options.UseSqlite(config.DbOptions.ConnectionString);
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
