@@ -2,6 +2,7 @@
 using FileServer.Core.Repositories;
 using FileServer.Core.Extensions;
 using FileServer.Core.Models;
+using System.Transactions;
 
 namespace FileServer.Core.Services
 {
@@ -44,17 +45,21 @@ namespace FileServer.Core.Services
         /// <returns>Id файла в формате Guid</returns>
         public async Task<Guid> Upload(Stream file, string fileName)
         {
+            //using var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             using var dbTransaction = await _fileRepository.Context.Database.BeginTransactionAsync();
             try
             {
                 Task<FileEntity> fileTask = AddToDbAsync(fileName);
                 Task copyFileTask = CopyFileAsync(file, fileName);
+                
                 FileEntity? fileEntity = null;
+                
                 var getFileEntityTask = Task.Run(async () => fileEntity = await fileTask);
 
                 await Task.WhenAll(copyFileTask, getFileEntityTask);
                 
                 await dbTransaction.CommitAsync();
+                //transactionScope.Complete();
 
                 return fileEntity!.Id;
             }
