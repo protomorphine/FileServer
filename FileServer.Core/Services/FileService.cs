@@ -3,6 +3,7 @@ using FileServer.Core.Repositories;
 using FileServer.Core.Extensions;
 using FileServer.Core.Models;
 using System.Transactions;
+using System.Diagnostics;
 
 namespace FileServer.Core.Services
 {
@@ -16,7 +17,7 @@ namespace FileServer.Core.Services
         /// <summary>
         /// Настройки хранилища
         /// </summary>
-        private readonly StorageOptions _storageOptions;
+        private readonly StorageOptions? _storageOptions;
         
         /// <summary>
         /// Репозиторий для работы с файлами
@@ -45,14 +46,22 @@ namespace FileServer.Core.Services
         /// <returns>Id файла в формате Guid</returns>
         public async Task<Guid> Upload(Stream file, string fileName)
         {
+            var stopWatch = new Stopwatch();
+
             //using var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             using var dbTransaction = await _fileRepository.Context.Database.BeginTransactionAsync();
             try
             {
+                stopWatch.Start();
+
+                var fileEntity = await AddToDbAsync(fileName);
+                await CopyFileAsync(file, fileEntity.Id.ToString());
+
+                /*
+                FileEntity? fileEntity = null;
+
                 Task<FileEntity> fileTask = AddToDbAsync(fileName);
                 Task copyFileTask = CopyFileAsync(file, fileName);
-                
-                FileEntity? fileEntity = null;
                 
                 var getFileEntityTask = Task.Run(async () => fileEntity = await fileTask);
 
@@ -60,7 +69,10 @@ namespace FileServer.Core.Services
                 
                 await dbTransaction.CommitAsync();
                 //transactionScope.Complete();
-
+                stopWatch.Stop();
+                */
+                await dbTransaction.CommitAsync();
+                Console.WriteLine(stopWatch.Elapsed.ToString());
                 return fileEntity!.Id;
             }
             catch (Exception ex)
@@ -80,7 +92,7 @@ namespace FileServer.Core.Services
 
             file.ThrowIfNotFound("Файл не найден");
 
-            var filePath = Path.Combine(_storageOptions.FileDir, file.Name);
+            var filePath = Path.Combine(_storageOptions.FileDir, file.Id.ToString());
 
             if (!File.Exists(filePath))
                 throw new FileNotFoundException("Запрашиваемый файл не найден!");
