@@ -4,6 +4,7 @@ using FileServer.Core.Extensions;
 using FileServer.Core.Models;
 using System.Transactions;
 using System.Diagnostics;
+using FileServer.Core.Managers;
 
 namespace FileServer.Core.Services
 {
@@ -24,14 +25,23 @@ namespace FileServer.Core.Services
         /// </summary>
         private readonly IFileRepository _fileRepository;
 
+        /// <summary>
+        /// Менеджер для работы с транзакциями базы данных
+        /// </summary>
+        private readonly IDbTransactionManager _dbTrancactionManager;
+
         #endregion
 
         #region конструкторы
 
-        public FileService(StorageOptions storageOptions, IFileRepository fileRepository)
+        public FileService(
+            StorageOptions storageOptions, 
+            IFileRepository fileRepository,
+            IDbTransactionManager dbTransactionManager)
         {
             _storageOptions = storageOptions;
             _fileRepository = fileRepository;
+            _dbTrancactionManager = dbTransactionManager;
         }
 
         #endregion
@@ -46,18 +56,15 @@ namespace FileServer.Core.Services
         /// <returns>Id файла в формате Guid</returns>
         public async Task<Guid> Upload(Stream file, string fileName)
         {
-            var stopWatch = new Stopwatch();
-
-            //using var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-            using var dbTransaction = await _fileRepository.Context.Database.BeginTransactionAsync();
+            using var dbTransaction = await _dbTrancactionManager.BeginTransactionAsync();
             try
             {
-                stopWatch.Start();
 
                 var fileEntity = await AddToDbAsync(fileName);
                 await CopyFileAsync(file, fileEntity.Id.ToString());
 
                 /*
+                
                 FileEntity? fileEntity = null;
 
                 Task<FileEntity> fileTask = AddToDbAsync(fileName);
@@ -67,12 +74,10 @@ namespace FileServer.Core.Services
 
                 await Task.WhenAll(copyFileTask, getFileEntityTask);
                 
-                await dbTransaction.CommitAsync();
-                //transactionScope.Complete();
-                stopWatch.Stop();
                 */
+
                 await dbTransaction.CommitAsync();
-                Console.WriteLine(stopWatch.Elapsed.ToString());
+                
                 return fileEntity!.Id;
             }
             catch (Exception ex)
@@ -131,7 +136,7 @@ namespace FileServer.Core.Services
         /// <param name="fileStream">Поток</param>
         /// <param name="fileName">Имя файла</param>
         private async Task CopyFileAsync(Stream fileStream, string fileName)
-        {
+        {   
             var filePath = Path.Combine(_storageOptions.FileDir, fileName);
 
             using (fileStream)

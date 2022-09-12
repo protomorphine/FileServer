@@ -9,6 +9,8 @@ using FileServer.Core.Repositories;
 using FileServer.Core.Services.Interfaces;
 using FileServer.Infrastructure.Data;
 using FileServer.Infrastructure.Repositories;
+using FileServer.Infrastructure.Managers;
+using FileServer.Core.Managers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,8 +24,13 @@ builder.Services.AddControllers();
 builder.Services.AddSingleton<DbOptions>(config.DbOptions);
 builder.Services.AddSingleton<StorageOptions>(config.StorageOptions);
 
+
 builder.Services.AddTransient<IFileService, FileService>();
+
 builder.Services.AddTransient<IFileRepository, FileRepository>();
+
+builder.Services.AddTransient<IDbTransactionManager, DbTransactionManager>();
+
 
 builder.Services.AddProblemDetails(options => {
     options.Map<FileNotFoundException>(ex => new ExtendedExceptionProblemDetails(ex, StatusCodes.Status404NotFound));

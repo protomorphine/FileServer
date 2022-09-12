@@ -32,18 +32,9 @@ namespace FileServer.Infrastructure.Repositories
         /// <param name="dbContext">Контекст бд</param>
         public FileRepository(AppDbContext dbContext)
         {
-            _dbContext = Context = dbContext;
+            _dbContext = dbContext;
             _files = dbContext.Files;
         }
-
-        #endregion
-
-        #region свойства
-
-        /// <summary>
-        /// Публичный контекст бд
-        /// </summary>
-        public DbContext Context { get; }
 
         #endregion
 

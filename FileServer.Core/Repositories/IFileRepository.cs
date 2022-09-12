@@ -9,11 +9,6 @@ namespace FileServer.Core.Repositories
     public interface IFileRepository
     {
         /// <summary>
-        /// Контекст базы данных
-        /// </summary>
-        DbContext Context { get; }
-
-        /// <summary>
         /// Метод создания сущность в бд
         /// </summary>
         /// <param name="fileEntity">файл</param>
