@@ -1,4 +1,5 @@
-﻿using FileServer.Core.Models;
+﻿using FileServer.Core.Dtos;
+using FileServer.Core.Models;
 
 namespace FileServer.Core.Services.Interfaces
 {
@@ -33,6 +34,6 @@ namespace FileServer.Core.Services.Interfaces
         /// Метод получаения всех сущностей файлов из бд
         /// </summary>
         /// <returns></returns>
-        Task<List<FileEntity>> GetAllFilesAsync();
+        Task<List<FileDto>> GetAllFilesAsync();
     }
 }

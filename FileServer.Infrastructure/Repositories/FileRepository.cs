@@ -2,6 +2,8 @@
 using FileServer.Core.Models;
 using FileServer.Core.Repositories;
 using FileServer.Infrastructure.Data;
+using FileServer.Core.Dtos;
+using FileServer.Core.Extensions;
 
 namespace FileServer.Infrastructure.Repositories
 {
@@ -76,11 +78,12 @@ namespace FileServer.Infrastructure.Repositories
         /// Возвращает список всех файлов в БД
         /// </summary>
         /// <returns>Список всех файлов</returns>
-        public async Task<List<FileEntity>> GetAllAsync()
+        public async Task<List<FileDto>> GetAllAsync()
         {
-            return await _files.ToListAsync();
+            return (await _files.ToListAsync()).ToFileDtoList();
         }
 
         #endregion
+
     }
 }

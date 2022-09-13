@@ -2,9 +2,8 @@
 using FileServer.Core.Repositories;
 using FileServer.Core.Extensions;
 using FileServer.Core.Models;
-using System.Transactions;
-using System.Diagnostics;
 using FileServer.Core.Managers;
+using FileServer.Core.Dtos;
 
 namespace FileServer.Core.Services
 {
@@ -133,7 +132,7 @@ namespace FileServer.Core.Services
         /// Метод получения списка всех файлов из базы данных
         /// </summary>
         /// <returns>Список файлов в базе данных</returns>
-        public async Task<List<FileEntity>> GetAllFilesAsync()
+        public async Task<List<FileDto>> GetAllFilesAsync()
         {
             return await _fileRepository.GetAllAsync();
         }

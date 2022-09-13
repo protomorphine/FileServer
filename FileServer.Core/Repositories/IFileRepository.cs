@@ -1,4 +1,5 @@
-﻿using FileServer.Core.Models;
+﻿using FileServer.Core.Dtos;
+using FileServer.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace FileServer.Core.Repositories
@@ -31,6 +32,10 @@ namespace FileServer.Core.Repositories
         /// <returns></returns>
         Task DeleteAsync(FileEntity fileEntity);
 
-        Task<List<FileEntity>> GetAllAsync();
+        /// <summary>
+        /// Получение всех записей в бд
+        /// </summary>
+        /// <returns>Список файлов в бд</returns>
+        Task<List<FileDto>> GetAllAsync();
     }
 }

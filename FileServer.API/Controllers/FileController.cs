@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using FileServer.Core.Services.Interfaces;
+using FileServer.Core.Models;
+using FileServer.Core.Dtos;
 
 namespace FileServer.API.Controllers
 {
@@ -65,11 +67,11 @@ namespace FileServer.API.Controllers
         /// </summary>
         /// <returns>список файлов</returns>
         [HttpGet("get-all-files")]
-        public async Task<IActionResult> GetAllFiles()
+        public async Task<List<FileDto>> GetAllFiles()
         {
-            var result = await _fileService.GetAllFilesAsync();
-            return Ok(result);
+            return await _fileService.GetAllFilesAsync();
         }
+
         #endregion
     }
 }
