@@ -60,6 +60,16 @@ namespace FileServer.API.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Получает список всех файлов
+        /// </summary>
+        /// <returns>список файлов</returns>
+        [HttpGet("get-all-files")]
+        public async Task<IActionResult> GetAllFiles()
+        {
+            var result = await _fileService.GetAllFilesAsync();
+            return Ok(result);
+        }
         #endregion
     }
 }

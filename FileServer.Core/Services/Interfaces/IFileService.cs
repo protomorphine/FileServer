@@ -28,5 +28,11 @@ namespace FileServer.Core.Services.Interfaces
         /// <param name="id">id файла в формате Guid</param>
         /// <returns></returns>
         Task Delete(Guid id);
+
+        /// <summary>
+        /// Метод получаения всех сущностей файлов из бд
+        /// </summary>
+        /// <returns></returns>
+        Task<List<FileEntity>> GetAllFilesAsync();
     }
 }

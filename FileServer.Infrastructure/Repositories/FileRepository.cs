@@ -72,6 +72,15 @@ namespace FileServer.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Возвращает список всех файлов в БД
+        /// </summary>
+        /// <returns>Список всех файлов</returns>
+        public async Task<List<FileEntity>> GetAllAsync()
+        {
+            return await _files.ToListAsync();
+        }
+
         #endregion
     }
 }

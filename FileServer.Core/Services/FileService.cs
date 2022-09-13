@@ -129,6 +129,14 @@ namespace FileServer.Core.Services
             await Task.Run(() => File.Delete(filePath));
         }
 
+        /// <summary>
+        /// Метод получения списка всех файлов из базы данных
+        /// </summary>
+        /// <returns>Список файлов в базе данных</returns>
+        public async Task<List<FileEntity>> GetAllFilesAsync()
+        {
+            return await _fileRepository.GetAllAsync();
+        }
 
         /// <summary>
         /// Сохраняет поток в файл

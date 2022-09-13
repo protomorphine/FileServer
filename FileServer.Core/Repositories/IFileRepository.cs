@@ -30,5 +30,7 @@ namespace FileServer.Core.Repositories
         /// <param name="fileEntity">сущность</param>
         /// <returns></returns>
         Task DeleteAsync(FileEntity fileEntity);
+
+        Task<List<FileEntity>> GetAllAsync();
     }
 }
