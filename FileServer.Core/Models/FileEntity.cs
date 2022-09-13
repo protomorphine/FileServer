@@ -1,4 +1,6 @@
-﻿namespace FileServer.Core.Models
+﻿using FileServer.Core.Dtos;
+
+namespace FileServer.Core.Models
 {
     /// <summary>
     /// Сущность - файл
@@ -14,5 +16,17 @@
         /// Имя файла
         /// </summary>
         public string Name { get; set; } = String.Empty;
+
+        /// <summary>
+        /// Мапинг сущности на ДТО
+        /// </summary>
+        /// <returns>ДТО - файл</returns>
+        public FileDto ToFileDto() => 
+            new FileDto
+            {
+                FileId = Id,
+                FileName = Name
+            };
+            
     }
 }
