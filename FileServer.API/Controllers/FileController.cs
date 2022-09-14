@@ -31,10 +31,10 @@ namespace FileServer.API.Controllers
         /// <param name="file">Файл</param>
         /// <returns>id файла</returns>
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadFile(IFormFile file)
+        public async Task<Guid> UploadFile(IFormFile file)
         {
-            var result = await _fileService.Upload(file.OpenReadStream(), file.FileName);
-            return Ok(result);
+            /*var result = */return await _fileService.Upload(file.OpenReadStream(), file.FileName);
+            //return Ok(result);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace FileServer.API.Controllers
         public async Task<FileContentResult> DownloadFile(Guid id)
         {
             var result =  await _fileService.Download(id);
-            return new FileContentResult(result.FileContent, result.ContentType)
+            return new FileContentResult(result!.FileContent, result.ContentType)
             {
                 FileDownloadName = result.Name
             };

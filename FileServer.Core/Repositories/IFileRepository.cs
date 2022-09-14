@@ -22,7 +22,7 @@ namespace FileServer.Core.Repositories
         /// </summary>
         /// <param name="id">id файла</param>
         /// <returns></returns>
-        Task<FileEntity> GetAsync(Guid id);
+        Task<FileEntity?> GetAsync(Guid id);
 
 
         /// <summary>

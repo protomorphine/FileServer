@@ -96,7 +96,7 @@ namespace FileServer.Core.Services
 
             file.ThrowIfNotFound("Файл не найден");
 
-            var filePath = Path.Combine(_storageOptions.FileDir, file.Id.ToString());
+            var filePath = Path.Combine(_storageOptions.FileDir, file!.Id.ToString());
 
             if (!File.Exists(filePath))
                 throw new FileNotFoundException("Запрашиваемый файл не найден!");

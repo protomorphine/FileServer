@@ -8,6 +8,6 @@
         /// <summary>
         /// Папка на диске, куда складываются файлы
         /// </summary>
-        public string? FileDir { get; set; }
+        public string? FileDir { get; set; } = String.Empty;
     }
 }

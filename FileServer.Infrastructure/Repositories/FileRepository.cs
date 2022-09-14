@@ -59,7 +59,7 @@ namespace FileServer.Infrastructure.Repositories
         /// </summary>
         /// <param name="id">id сущности в формате Guid</param>
         /// <returns>сущность файла</returns>
-        public async Task<FileEntity> GetAsync(Guid id)
+        public async Task<FileEntity?> GetAsync(Guid id)
         {
             return await _files.FirstOrDefaultAsync(it => it.Id == id); ;
         }
