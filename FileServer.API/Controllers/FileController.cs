@@ -10,12 +10,19 @@ namespace FileServer.API.Controllers
     {
         #region поля
 
+        /// <summary>
+        /// Сервис для работы с файлами
+        /// </summary>
         private readonly IFileService _fileService;
 
         #endregion
 
         #region конструктор
 
+        /// <summary>
+        /// Создает новый экземпляр <see cref="FileController"/>
+        /// </summary>
+        /// <param name="fileService">сервис для работы с файлами</param>
         public FileController(IFileService fileService)
         {
             _fileService = fileService;
@@ -32,8 +39,7 @@ namespace FileServer.API.Controllers
         [HttpPost("upload")]
         public async Task<Guid> UploadFile(IFormFile file)
         {
-            /*var result = */return await _fileService.Upload(file.OpenReadStream(), file.FileName);
-            //return Ok(result);
+            return await _fileService.Upload(file.OpenReadStream(), file.FileName);
         }
 
         /// <summary>
@@ -65,7 +71,7 @@ namespace FileServer.API.Controllers
         /// Получает список всех файлов
         /// </summary>
         /// <returns>список файлов</returns>
-        [HttpGet("get-all-files")]
+        [HttpGet("all")]
         public async Task<List<FileDto>> GetAllFiles()
         {
             return await _fileService.GetAllFilesAsync();

@@ -1,7 +1,7 @@
 ﻿namespace FileServer.Core.Models
 {
     /// <summary>
-    /// Модель ответа при получении файла при использовании http
+    /// Модель ответа при получении файла
     /// </summary>
     public class FileResponceModel
     {
