@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FileServer.Core.Dtos;
+using Microsoft.AspNetCore.Mvc;
 using FileServer.Core.Services.Interfaces;
-using FileServer.Core.Models;
-using FileServer.Core.Dtos;
 
 namespace FileServer.API.Controllers
 {
@@ -45,7 +44,7 @@ namespace FileServer.API.Controllers
         public async Task<FileContentResult> DownloadFile(Guid id)
         {
             var result =  await _fileService.Download(id);
-            return new FileContentResult(result!.FileContent, result.ContentType)
+            return new FileContentResult(result.FileContent!, result.ContentType!)
             {
                 FileDownloadName = result.Name
             };

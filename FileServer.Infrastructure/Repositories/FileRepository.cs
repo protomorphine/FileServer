@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using FileServer.Core.Models;
 using FileServer.Core.Repositories;
 using FileServer.Infrastructure.Data;
 using FileServer.Core.Dtos;
 using FileServer.Core.Extensions;
+using FileServer.Core.Entities;
 
 namespace FileServer.Infrastructure.Repositories
 {
@@ -61,7 +61,7 @@ namespace FileServer.Infrastructure.Repositories
         /// <returns>сущность файла</returns>
         public async Task<FileEntity?> GetAsync(Guid id)
         {
-            return await _files.FirstOrDefaultAsync(it => it.Id == id); ;
+            return await _files.AsNoTracking().FirstOrDefaultAsync(it => it.Id == id);
         }
 
         /// <summary>

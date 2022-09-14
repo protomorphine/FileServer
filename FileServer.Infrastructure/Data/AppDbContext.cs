@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using FileServer.Core.Models;
+using FileServer.Core.Entities;
 
 namespace FileServer.Infrastructure.Data
 {

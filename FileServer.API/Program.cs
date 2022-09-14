@@ -21,8 +21,8 @@ var config = builder.Configuration.GetSection("Config").Get<Config>();
 
 builder.Services.AddControllers();
 
-builder.Services.AddSingleton<DbOptions>(config.DbOptions);
-builder.Services.AddSingleton<StorageOptions>(config.StorageOptions);
+builder.Services.AddSingleton<DbOptions>(config.DbOptions!);
+builder.Services.AddSingleton<StorageOptions>(config.StorageOptions!);
 
 
 builder.Services.AddTransient<IFileService, FileService>();
@@ -38,7 +38,7 @@ builder.Services.AddProblemDetails(options => {
 });
 
 builder.Services.AddDbContext<AppDbContext>(options => {
-    options.UseSqlite(config.DbOptions.ConnectionString);
+    options.UseSqlite(config!.DbOptions!.ConnectionString!);
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

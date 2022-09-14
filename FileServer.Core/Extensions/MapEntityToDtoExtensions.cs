@@ -1,5 +1,5 @@
 ﻿using FileServer.Core.Dtos;
-using FileServer.Core.Models;
+using FileServer.Core.Entities;
 
 namespace FileServer.Core.Extensions
 {
