@@ -36,6 +36,8 @@ namespace FileServer.Core.Repositories
         /// Получение всех записей в бд
         /// </summary>
         /// <returns>Список файлов в бд</returns>
-        Task<List<FileDto>> GetAllAsync();
+        Task<List<FileDto>> GetFilesAsync(SortAndFilterFilesDto dto);
+
+        //Task<List<FileDto>> SearchFilesAsync();
     }
 }

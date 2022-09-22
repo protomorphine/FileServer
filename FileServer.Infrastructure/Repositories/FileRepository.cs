@@ -78,9 +78,23 @@ namespace FileServer.Infrastructure.Repositories
         /// Возвращает список всех файлов в БД
         /// </summary>
         /// <returns>Список всех файлов</returns>
-        public async Task<List<FileDto>> GetAllAsync()
+        public async Task<List<FileDto>> GetFilesAsync(SortAndFilterFilesDto dto)
         {
-            return (await _files.ToListAsync()).ToFileDtoList();
+            var result = await _files.ToListAsync();
+            
+            if (dto.SearchString != null)
+            {
+                result = result.Where(file => file.Name.ToLower().Contains(dto.SearchString.ToLower())).ToList();
+            }
+
+            result = dto.SortBy switch
+            {
+                "asc" => result.OrderBy(file => file.Name).ToList(),
+                "desc" => result.OrderByDescending(file => file.Name).ToList(),
+                _ => result
+            };
+
+            return result.ToFileDtoList();
         }
 
         #endregion

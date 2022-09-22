@@ -120,9 +120,9 @@ namespace FileServer.Core.Services
         /// Метод получения списка всех файлов из базы данных
         /// </summary>
         /// <returns>Список файлов в базе данных</returns>
-        public async Task<List<FileDto>> GetAllFilesAsync()
+        public async Task<List<FileDto>> GetAllFilesAsync(SortAndFilterFilesDto dto)
         {
-            return await _fileRepository.GetAllAsync();
+            return await _fileRepository.GetFilesAsync(dto);
         }
 
         /// <summary>

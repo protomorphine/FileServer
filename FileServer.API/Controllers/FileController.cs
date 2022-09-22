@@ -72,9 +72,9 @@ namespace FileServer.API.Controllers
         /// </summary>
         /// <returns>список файлов</returns>
         [HttpGet("all")]
-        public async Task<List<FileDto>> GetAllFiles()
+        public async Task<List<FileDto>> GetAllFiles([FromQuery] SortAndFilterFilesDto dto)
         {
-            return await _fileService.GetAllFilesAsync();
+            return await _fileService.GetAllFilesAsync(dto);
         }
 
         #endregion

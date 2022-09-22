@@ -34,6 +34,6 @@ namespace FileServer.Core.Services.Interfaces
         /// Метод получаения всех сущностей файлов из бд
         /// </summary>
         /// <returns></returns>
-        Task<List<FileDto>> GetAllFilesAsync();
+        Task<List<FileDto>> GetAllFilesAsync(SortAndFilterFilesDto dto);
     }
 }
