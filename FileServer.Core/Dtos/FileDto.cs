@@ -12,6 +12,9 @@
         /// </summary>
         public Guid FileId { get; set; }
         
+        /// <summary>
+        /// Дата добавления файла в БД
+        /// </summary>
         public DateTime CreatedAt { get; set; }
     }
 }

@@ -35,5 +35,12 @@ namespace FileServer.Core.Services.Interfaces
         /// </summary>
         /// <returns></returns>
         Task<List<FileDto>> GetAllFilesAsync(SortAndFilterFilesDto dto);
+        
+        /// <summary>
+        /// Метод получения информации о файле по id
+        /// </summary>
+        /// <param name="id">id файла в БД</param>
+        /// <returns><see cref="FileDto"/></returns>
+        Task<FileDto> GetFileInfoById(Guid id);
     }
 }

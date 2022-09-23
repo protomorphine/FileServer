@@ -56,7 +56,7 @@ namespace FileServer.Core.Services
         /// <returns>Id файла в формате Guid</returns>
         public async Task<Guid> Upload(Stream file, string fileName)
         {
-            using var dbTransaction = await _dbTrancactionManager.BeginTransactionAsync();
+            await using var dbTransaction = await _dbTrancactionManager.BeginTransactionAsync();
             try
             {
                 var fileEntity = await AddToDbAsync(fileName);
@@ -124,6 +124,17 @@ namespace FileServer.Core.Services
         {
             return await _fileRepository.GetFilesAsync(dto);
         }
+        
+        /// <summary>
+        /// Метод получения информации о файле по id
+        /// </summary>
+        /// <param name="id">id файла в БД</param>
+        /// <returns><see cref="FileDto"/></returns>
+        public async Task<FileDto> GetFileInfoById(Guid id)
+        {
+            var file = await _fileRepository.GetAsync(id);
+            return file!.ToFileDto();
+        }
 
         /// <summary>
         /// Сохраняет поток в файл
@@ -134,9 +145,9 @@ namespace FileServer.Core.Services
         {   
             var filePath = Path.Combine(_storageOptions.FileDir!, fileName);
 
-            using (fileStream)
+            await using (fileStream)
             {
-                using (var dest = new FileStream(filePath, FileMode.Create))
+                await using (var dest = new FileStream(filePath, FileMode.Create))
                 {
                     await fileStream.CopyToAsync(dest);
                 }
@@ -159,7 +170,6 @@ namespace FileServer.Core.Services
             await _fileRepository.CreateAsync(entity);
             return entity;
         }
-
         #endregion
     }
 }

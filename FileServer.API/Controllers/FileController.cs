@@ -66,6 +66,17 @@ namespace FileServer.API.Controllers
             await _fileService.Delete(id);
             return Ok();
         }
+        
+        /// <summary>
+        /// Получение информации о файле
+        /// </summary>
+        /// <param name="id">id файла в БД</param>
+        /// <returns><see cref="FileDto"/></returns>
+        [HttpGet("{id}")]
+        public async Task<FileDto> GetFileInfo(Guid id)
+        {
+            return await _fileService.GetFileInfoById(id);
+        }
 
         /// <summary>
         /// Получает список всех файлов

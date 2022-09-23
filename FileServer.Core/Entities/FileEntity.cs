@@ -17,6 +17,9 @@ namespace FileServer.Core.Entities
         /// </summary>
         public string Name { get; set; } = string.Empty;
         
+        /// <summary>
+        /// Дата добавления файла в БД
+        /// </summary>
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         
         /// <summary>
