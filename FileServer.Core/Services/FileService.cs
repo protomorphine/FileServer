@@ -108,7 +108,7 @@ namespace FileServer.Core.Services
             file.ThrowIfNotFound("Файл не найден.");
             await _fileRepository.DeleteAsync(file!);
 
-            var filePath = Path.Combine(_storageOptions?.FileDir!, file!.Name);
+            var filePath = Path.Combine(_storageOptions?.FileDir!, file!.Id.ToString());
 
             if (!File.Exists(filePath))
                 throw new FileNotFoundException("Файл не найден!");
