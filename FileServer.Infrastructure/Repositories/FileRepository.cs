@@ -87,10 +87,17 @@ namespace FileServer.Infrastructure.Repositories
                 result = result.Where(file => file.Name.ToLower().Contains(dto.SearchString.ToLower())).ToList();
             }
 
-            result = dto.SortBy switch
+            var sortBy = dto.SortBy switch
             {
-                "asc" => result.OrderBy(file => file.Name).ToList(),
-                "desc" => result.OrderByDescending(file => file.Name).ToList(),
+                "name" => nameof(FileEntity.Name),
+                "createdAt" => nameof(FileEntity.CreatedAt),
+                _ => nameof(FileEntity.Name)
+            };
+            
+            result = dto.SortOrder switch
+            {
+                "asc" => result.OrderBy(file => file.GetType().GetProperty(sortBy)).ToList(),
+                "desc" => result.OrderByDescending(file => file.GetType().GetProperty(sortBy)).ToList(),
                 _ => result
             };
 
