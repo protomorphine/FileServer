@@ -16,7 +16,9 @@ namespace FileServer.Core.Entities
         /// Имя файла
         /// </summary>
         public string Name { get; set; } = string.Empty;
-
+        
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        
         /// <summary>
         /// Мапинг сущности на ДТО
         /// </summary>
@@ -25,7 +27,8 @@ namespace FileServer.Core.Entities
             new FileDto
             {
                 FileId = Id,
-                FileName = Name
+                FileName = Name,
+                CreatedAt = CreatedAt
             };
 
     }

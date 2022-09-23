@@ -11,5 +11,7 @@
         /// Id файла
         /// </summary>
         public Guid FileId { get; set; }
+        
+        public DateTime CreatedAt { get; set; }
     }
 }
