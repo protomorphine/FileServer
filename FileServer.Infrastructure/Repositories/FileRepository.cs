@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using FileServer.Core.Repositories;
 using FileServer.Infrastructure.Data;
 using FileServer.Core.Dtos;
@@ -86,21 +87,14 @@ namespace FileServer.Infrastructure.Repositories
             {
                 result = result.Where(file => file.Name.ToLower().Contains(dto.SearchString.ToLower())).ToList();
             }
-
-            var sortBy = dto.SortBy switch
-            {
-                "name" => nameof(FileEntity.Name),
-                "createdAt" => nameof(FileEntity.CreatedAt),
-                _ => nameof(FileEntity.Name)
-            };
             
             result = dto.SortOrder switch
             {
-                "asc" => result.OrderBy(file => file.GetType().GetProperty(sortBy)).ToList(),
-                "desc" => result.OrderByDescending(file => file.GetType().GetProperty(sortBy)).ToList(),
+                "asc" => result.OrderBy(file => file.Name).ToList(),
+                "desc" => result.OrderByDescending(file => file.Name).ToList(),
                 _ => result
             };
-
+            
             return result.ToFileDtoList();
         }
 
